@@ -17,7 +17,7 @@ export async function POST(req: Request) {
 
   try {
     // Write the audio data to a temporary WAV file synchronously
-    fs.writeFileSync(filePath, audio);
+    fs.writeFileSync(filePath, new Uint8Array(audio.buffer, audio.byteOffset, audio.byteLength));
 
     // Create a readable stream from the temporary WAV file
     const readStream = fs.createReadStream(filePath);

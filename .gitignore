@@ -35,4 +35,28 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
+# Virtual Environment
+venv/
+*.pyc
+__pycache__/
 .env
+
+# IDE specific
+.vscode/
+.idea/
+
+# OS specific
+.DS_Store
+Thumbs.db
+
+# Build artifacts
+build/
+dist/
+*.egg-info/
+
+# Data files (if large or sensitive, or generated)
+data/extracted_invoices.csv # Example, adjust if needed
+data/duplicate_pairs_ground_truth.csv # Example
+data/contracts.csv # Example
+*.pt # PyTorch models
+*.png # Generated images like gnn_embeddings.png

@@ -1,6 +1,6 @@
 import { initializeApp, getApps, getApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
-import { getFirestore } from "firebase/firestore";
+import { getFirestore, connectFirestoreEmulator } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
 
 const firebaseConfig = {
@@ -17,5 +17,15 @@ const app = getApps().length ? getApp() : initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 const storage = getStorage(app);
+
+// Connect to Firestore emulator in development
+if (process.env.NODE_ENV !== 'production') {
+  try {
+    connectFirestoreEmulator(db, 'localhost', 8080);
+    console.log("Firestore emulator connected");
+  } catch (error) {
+    console.error("Error connecting to Firestore emulator:", error);
+  }
+}
 
 export { app, auth, db, storage };
