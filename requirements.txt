@@ -16,6 +16,25 @@ flake8==6.1.0
 # Embeddings and Vector Search
 sentence-transformers==2.2.2
 faiss-cpu==1.7.4
+huggingface-hub==0.11.1
 # Dependencies for Hugging Face datasets streaming
 fsspec
 aiohttp
+
+# Graph & GNN
+py2neo==2021.2.4
+torch==2.0.1
+# For torch-geometric and its dependencies, it's best to install them using the official PyG wheel find-links URL
+# to ensure compatibility with your PyTorch version and CPU/CUDA. Example for PyTorch 2.0.x (CPU):
+# pip install torch-scatter torch-sparse torch-cluster torch-spline-conv -f https://data.pyg.org/whl/torch-2.0.0+cpu.html
+# The versions below are commonly compatible but verify against the link above for your specific PyTorch.
+torch-scatter==2.1.1
+torch-sparse==0.6.17
+torch-cluster==1.6.1
+torch-spline-conv==1.2.2
+torch-geometric==2.4.0
+
+# Visualization & evaluation
+matplotlib>=3.5.0
+scikit-learn>=1.2.0
+networkx>=2.8.0

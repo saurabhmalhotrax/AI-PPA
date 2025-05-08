@@ -2,6 +2,7 @@ import os
 from dotenv import load_dotenv  # type: ignore
 
 # Load environment variables from .env file
+# Attempting to force a re-read by adding a comment here
 load_dotenv()
 
 # Vision AI API Keys - these should be set in your .env file
@@ -19,9 +20,9 @@ GEMINI_VISION_ENDPOINT = os.getenv("GEMINI_VISION_ENDPOINT", "https://generative
 GEMINI_MODEL = os.getenv("GEMINI_MODEL", "gemini-1.5-pro-vision-latest") # Example
 
 # Neo4j Configuration
-NEO4J_URI = os.getenv("NEO4J_URI", "bolt://localhost:7687")
-NEO4J_USER = os.getenv("NEO4J_USER", "neo4j")
-NEO4J_PASSWORD = os.getenv("NEO4J_PASSWORD", "testpassword") # Match docker-compose
+NEO4J_URI = os.getenv("NEO4J_URI")
+NEO4J_USER = os.getenv("NEO4J_USER")
+NEO4J_PASSWORD = os.getenv("NEO4J_PASSWORD")
 
 # Generic VISION_API_KEY - assess if still needed or if specific keys above cover all uses.
 # If this was intended for the vision_extractor, it now uses OPENAI_API_KEY or GEMINI_API_KEY.
@@ -35,6 +36,10 @@ elif not OPENAI_API_KEY:
     print("Warning: OPENAI_API_KEY not found in environment variables. OpenAI features will not work.")
 elif not GEMINI_API_KEY:
     print("Warning: GEMINI_API_KEY not found in environment variables. Gemini features will not work.")
+
+if not all([NEO4J_URI, NEO4J_USER, NEO4J_PASSWORD]):
+    print("Warning: One or more Neo4j connection variables (NEO4J_URI, NEO4J_USER, NEO4J_PASSWORD) are not set in environment variables.")
+    print("Please set them in your .env file for Neo4j integration to work.")
 
 # Add other configurations as needed
 # Example: EMBEDDING_MODEL_NAME = os.getenv("EMBEDDING_MODEL_NAME", "all-MiniLM-L6-v2")

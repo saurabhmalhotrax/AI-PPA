@@ -5,9 +5,21 @@ from datetime import datetime
 from typing import Union, Tuple, List
 from dateutil import parser
 
-# Initialize the embedding model globally
-# This model will be loaded once when the module is imported.
-model = SentenceTransformer('all-MiniLM-L6-v2')
+# Initialize the embedding model globally - REMOVED
+# model = SentenceTransformer('all-MiniLM-L6-v2') 
+
+# Global variable to cache the model
+_model_cache = None
+
+def _get_embedding_model():
+    """Loads and returns the SentenceTransformer model, caching it globally."""
+    global _model_cache
+    if _model_cache is None:
+        print("INFO: Loading sentence_transformers model for the first time (forcing CPU).")
+        # Force CPU to see if it resolves Metal/MPS related crashes
+        _model_cache = SentenceTransformer('all-MiniLM-L6-v2', device='cpu') 
+        print("INFO: Sentence_transformers model loaded on CPU.")
+    return _model_cache
 
 def invoice_to_text_representation(invoice_data_dict: dict) -> str:
     """
@@ -39,6 +51,7 @@ def get_embedding(text_string: str) -> List[float]:
     Returns:
         A list of floats representing the dense vector embedding.
     """
+    model = _get_embedding_model() # Get model via the new function
     # Use the initialized SentenceTransformer model to encode the text
     embedding = model.encode(text_string)
     # Convert the resulting NumPy array to a Python list
@@ -313,6 +326,27 @@ def find_potential_duplicates(
         })
 
     return potential_duplicates
+
+def get_embeddings(text_list: List[str], batch_size: int = 32, show_progress_bar: bool = False) -> List[List[float]]:
+    """
+    Encodes a list of strings in a single batch call to the underlying SentenceTransformer
+    model. This is much more efficient and avoids repeatedly constructing DataLoaders,
+    which on macOS can leak multiprocessing semaphores and eventually crash the
+    interpreter.
+
+    Args:
+        text_list: List of strings to embed.
+        batch_size: Batch size for SentenceTransformer.encode.
+        show_progress_bar: Whether to display the tqdm progress bar.
+
+    Returns:
+        List of embeddings as lists of floats, in the same order as the input.
+    """
+    if not text_list:
+        return []
+    model = _get_embedding_model()
+    embeddings_np = model.encode(text_list, batch_size=batch_size, show_progress_bar=show_progress_bar)
+    return [vec.tolist() for vec in embeddings_np]
 
 # Example Usage (can be removed or commented out)
 if __name__ == '__main__':

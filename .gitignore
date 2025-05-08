@@ -60,3 +60,4 @@ data/duplicate_pairs_ground_truth.csv # Example
 data/contracts.csv # Example
 *.pt # PyTorch models
 *.png # Generated images like gnn_embeddings.png
+.venv/
