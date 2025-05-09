@@ -9,6 +9,7 @@ export default function Header() {
           <Link href="/">Home</Link>
           <Link href="/invoices/upload">Upload</Link>
           <Link href="/invoices/history">History</Link>
+          <Link href="/risk-heatmap">Risk Heatmap</Link>
         </div>
       </nav>
     </header>

@@ -44,6 +44,16 @@ if not all([NEO4J_URI, NEO4J_USER, NEO4J_PASSWORD]):
 # Add other configurations as needed
 # Example: EMBEDDING_MODEL_NAME = os.getenv("EMBEDDING_MODEL_NAME", "all-MiniLM-L6-v2")
 
+DUPLICATE_DETECTION = {
+    'extracted_invoices_path': os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'data', 'extracted_invoices.csv'),
+    'ground_truth_path': os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'data', 'duplicate_pairs_ground_truth.csv'),
+    'invoice_id_column': 'filename',  # Or 'id', ensure this matches your CSVs and ground truth
+    'similarity_threshold': 0.88,    # Default from evaluate_duplicates.py & duplicate_detector.py
+    'amount_difference_threshold': 1.0, # Default
+    'date_difference_days_threshold': 7, # Default
+    'top_k_faiss': 20                 # Default
+}
+
 # You might want to use a single key if your chosen Vision AI provider is fixed
 # For example, if you only plan to use OpenAI:
 # VISION_API_KEY = OPENAI_API_KEY

@@ -11,8 +11,13 @@
   "dependencies": {
     "@ai-sdk/anthropic": "^0.0.48",
     "@ai-sdk/openai": "^0.0.54",
+    "@deck.gl/aggregation-layers": "^9.1.11",
+    "@deck.gl/core": "^9.1.11",
+    "@deck.gl/layers": "^9.1.11",
+    "@deck.gl/react": "^9.1.11",
     "@deepgram/sdk": "^3.13.0",
     "ai": "^3.4.33",
+    "d3-scale": "^4.0.2",
     "date-fns": "^3.6.0",
     "firebase": "^10.14.1",
     "framer-motion": "^11.18.2",

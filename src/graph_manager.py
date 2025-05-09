@@ -91,4 +91,47 @@ def check_invoice_exceeds_contract(graph, invoice_id):
     RETURN i.invoice_id AS invoice_id, i.total_amount AS invoice_amount,
            c.contract_id AS contract_id, c.max_value AS contract_value
     '''
-    return graph.run(query, invoice_id=invoice_id).data() 
+    return graph.run(query, invoice_id=invoice_id).data()
+
+def fetch_graph_data(graph):
+    """
+    Fetch all nodes and relationships from the Neo4j graph and format for 3D visualization.
+    Returns:
+        nodes: List[dict] where each dict has 'id', 'label', and all node properties.
+        links: List[dict] where each dict has 'source', 'target', and 'type'.
+    """
+    # Fetch nodes with their labels and properties
+    nodes_query = '''
+    MATCH (n)
+    RETURN id(n) AS id, labels(n)[0] AS label, properties(n) AS properties
+    '''
+    nodes_result = graph.run(nodes_query).data()
+
+    # Fetch relationships with types
+    links_query = '''
+    MATCH (n)-[r]->(m)
+    RETURN id(n) AS source, id(m) AS target, type(r) AS type
+    '''
+    links_result = graph.run(links_query).data()
+
+    # Format nodes and links for 3d-force-graph
+    formatted_nodes = []
+    for record in nodes_result:
+        node = {
+            'id': record['id'],
+            'label': record['label'],
+        }
+        # Unpack properties map into node dict
+        if isinstance(record['properties'], dict):
+            node.update(record['properties'])
+        formatted_nodes.append(node)
+
+    formatted_links = []
+    for record in links_result:
+        formatted_links.append({
+            'source': record['source'],
+            'target': record['target'],
+            'type': record['type']
+        })
+
+    return formatted_nodes, formatted_links 
